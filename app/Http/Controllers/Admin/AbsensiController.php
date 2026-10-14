@@ -190,7 +190,8 @@ class AbsensiController extends Controller
             'sesi'      => $rekap['sesi'],
             'baris'     => $rekap['baris'],
             'ringkasan' => $this->service->ringkasan($rekap['baris']),
-            'logo'      => $this->logoDataUri(),
+            'logo'       => $this->gambarDataUri(config('hima.logo')),
+            'logoKampus' => $this->gambarDataUri(config('hima.logo_kampus')),
         ])->setPaper('a4', 'portrait')->download($nama);
     }
 
@@ -207,12 +208,12 @@ class AbsensiController extends Controller
         );
     }
 
-    /** Logo sebagai data URI supaya DomPDF tidak bermasalah dengan path file. */
-    private function logoDataUri(): ?string
+    /** Gambar sebagai data URI supaya DomPDF tidak bermasalah dengan path file. */
+    private function gambarDataUri(?string $relatif): ?string
     {
-        $path = public_path(config('hima.logo'));
+        $path = $relatif ? public_path($relatif) : null;
 
-        if (!is_file($path)) {
+        if (!$path || !is_file($path)) {
             return null;
         }
 

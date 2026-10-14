@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="paksa-terang">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Absensi — {{ $kegiatan->nama }}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@700&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>body{font-family:'Plus Jakarta Sans',sans-serif}.serif{font-family:'Noto Serif',serif}svg{max-width:100%;height:auto}</style>
+    <style>svg{max-width:100%;height:auto}</style>
+    @include('layouts._tema')
 </head>
 <body class="flex min-h-screen flex-col items-center justify-center bg-white px-4 py-8 text-center">
     <p class="mb-2 text-sm font-semibold uppercase tracking-widest text-[#6B1124]">Absensi Kegiatan</p>

@@ -15,6 +15,7 @@ use PhpOffice\PhpSpreadsheet\Cell\StringValueBinder;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Worksheet\BaseDrawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 
@@ -106,7 +107,7 @@ class AbsensiRekapExport extends StringValueBinder implements FromArray, WithEve
         return $lebar;
     }
 
-    public function drawings()
+    public function drawings(): BaseDrawing|array
     {
         $path = public_path(config('hima.logo'));
         if (!is_file($path)) {

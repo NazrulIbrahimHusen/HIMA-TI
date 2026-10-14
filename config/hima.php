@@ -1,10 +1,24 @@
 <?php
 
 return [
-    // Dipakai di header export Excel/PDF
-    'nama'        => env('HIMA_NAMA', 'HIMA Informatika UNILAM'),
-    // Letakkan file logo (PNG) di public/images/logo-hima.png. Jika tidak ada, header tampil tanpa logo.
-    'logo'        => 'images/logo-hima.png',
+    // Nama organisasi (dipakai di header export Excel)
+    'nama' => env('HIMA_NAMA', 'Himpunan Mahasiswa Program Studi Informatika'),
+
+    // Kop surat untuk export PDF — mengikuti kop surat resmi HIMA
+    'kop' => [
+        'baris' => [
+            'HIMPUNAN MAHASISWA PROGRAM STUDI INFORMATIKA',
+            'FAKULTAS TEKNOLOGI INFORMASI',
+            'UNIVERSITAS LA TANSA MASHIRO',
+        ],
+        'alamat' => env('HIMA_ALAMAT', 'Jl. Soekarno-Hatta, Rangkasbitung, Kabupaten Lebak, Banten 42317'),
+        'email'  => env('HIMA_EMAIL', 'himainformatika25@gmail.com'),
+    ],
+
+    // Logo (PNG transparan) di public/images
+    'logo'        => 'images/logo-hima.png',    // logo HIMA — kanan kop, juga dipakai di Excel
+    'logo_kampus' => 'images/logo-unilam.png',  // logo UNILAM — kiri kop
+
     // Jabatan penandatangan di bagian bawah PDF
     'jabatan_ttd' => env('HIMA_JABATAN_TTD', 'Ketua HIMA Informatika'),
 ];

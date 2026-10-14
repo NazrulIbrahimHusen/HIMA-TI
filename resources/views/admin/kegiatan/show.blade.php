@@ -66,7 +66,7 @@
             <h3 class="mb-3 font-serif text-lg font-bold text-stone-800">Link & QR Absensi</h3>
 
             @if ($kegiatan->status === 'published')
-                <div class="mb-4 flex justify-center rounded-xl border border-stone-200 bg-white p-3 [&>svg]:h-auto [&>svg]:max-w-full">{!! $qrSvg !!}</div>
+                <div class="mb-4 flex justify-center qr-box rounded-xl border border-stone-200 bg-white p-3 [&>svg]:h-auto [&>svg]:max-w-full">{!! $qrSvg !!}</div>
 
                 <div x-data="{ ok: false }" class="mb-3">
                     <p class="mb-1 text-xs font-medium text-stone-500">Link absensi</p>

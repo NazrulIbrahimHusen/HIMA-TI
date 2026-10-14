@@ -4,10 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal Mahasiswa — SI HIMA Informatika</title>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Noto+Serif:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
-    <style>body{font-family:'Plus Jakarta Sans',sans-serif}.serif{font-family:'Noto Serif',serif}.mono{font-family:'JetBrains Mono',monospace}[x-cloak]{display:none!important}</style>
+    @include('layouts._tema')
 </head>
 <body class="min-h-screen bg-[#FAF6F5] text-stone-800">
 
@@ -21,7 +18,7 @@
     <header class="bg-[#4A0012] text-white">
         <div class="mx-auto flex max-w-4xl items-center justify-between px-4 py-4">
             <div class="flex items-center gap-3">
-                <div class="serif flex h-10 w-10 items-center justify-center rounded-full bg-white/15 font-bold">HI</div>
+                <x-logo tinggi="h-8" />
                 <div class="leading-tight">
                     <p class="serif font-bold">SI HIMA Informatika</p>
                     <p class="text-xs text-white/60">Portal Mahasiswa</p>

@@ -1,9 +1,132 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
+/* Font dimuat dari paket lokal (tanpa Google Fonts) */
+@import "@fontsource-variable/plus-jakarta-sans/wght.css";
+@import "@fontsource/noto-serif/latin-600.css";
+@import "@fontsource/noto-serif/latin-700.css";
+@import "@fontsource/jetbrains-mono/latin-400.css";
+@import "@fontsource/jetbrains-mono/latin-500.css";
 
+/* Sumber kelas Tailwind */
+@source "../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php";
+@source "../../storage/framework/views/*.php";
+@source "../**/*.blade.php";
+@source "../**/*.js";
+
+/* Design system Academic Crimson */
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --color-maroon: #6B1124;
+    --color-maroon-dark: #4A0012;
+    --color-maroon-light: #8E2A3F;
+    --color-maroon-soft: #F7ECEE;
+
+    --font-sans: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, sans-serif;
+    --font-serif: "Noto Serif", ui-serif, Georgia, serif;
+    --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+/* Kompatibilitas perilaku bawaan Tailwind v3 */
+@layer base {
+    *, ::after, ::before, ::backdrop, ::file-selector-button {
+        border-color: var(--color-gray-200, currentColor);
+    }
+    button:not(:disabled), [role="button"]:not(:disabled) {
+        cursor: pointer;
+    }
+}
+
+[x-cloak] { display: none !important; }
+
+/* Pintasan untuk halaman mandiri yang memakai .serif dan .mono */
+.serif { font-family: var(--font-serif); }
+.mono  { font-family: var(--font-mono); }
+
+/*
+ * Mode gelap otomatis mengikuti perangkat (prefers-color-scheme): palet "Academic Crimson Noir".
+ * Kanvas #120d0e, kartu #1a1215, garis #3d242a, aksen #e63956, teks #fdf0f2.
+ * Halaman yang harus selalu terang (mis. layar QR untuk proyektor) memberi class "paksa-terang" pada <html>.
+ * Jika ada kelas warna baru yang kurang pas di mode gelap, tambahkan aturannya di sini.
+ */
+@media (prefers-color-scheme: dark) {
+    html:not(.paksa-terang) { color-scheme: dark; }
+    html:not(.paksa-terang) .bg-\[\#FAF6F5\],
+    html:not(.paksa-terang) .bg-gray-50,
+    html:not(.paksa-terang) .bg-gray-100 { background-color: #120d0e !important; }
+    html:not(.paksa-terang) .bg-white { background-color: #1a1215 !important; }
+    html:not(.paksa-terang) .bg-white\/90 { background-color: rgba(18, 13, 14, .9) !important; }
+    html:not(.paksa-terang) .bg-stone-50,
+    html:not(.paksa-terang) .hover\:bg-stone-50:hover,
+    html:not(.paksa-terang) .bg-stone-100 { background-color: #22181c !important; }
+    html:not(.paksa-terang) .bg-stone-200 { background-color: #2f2026 !important; }
+    html:not(.paksa-terang) .bg-stone-800 { background-color: #3d242a !important; }
+    html:not(.paksa-terang) .hover\:bg-stone-700:hover { background-color: #4a2c34 !important; }
+    html:not(.paksa-terang) .text-stone-800,
+    html:not(.paksa-terang) .text-gray-800 { color: #fdf0f2 !important; }
+    html:not(.paksa-terang) .text-stone-700,
+    html:not(.paksa-terang) .text-gray-700 { color: #f1e3e6 !important; }
+    html:not(.paksa-terang) .text-stone-600,
+    html:not(.paksa-terang) .text-gray-600 { color: #e0d0d3 !important; }
+    html:not(.paksa-terang) .text-stone-500,
+    html:not(.paksa-terang) .text-gray-500 { color: #bda9ae !important; }
+    html:not(.paksa-terang) .text-stone-400,
+    html:not(.paksa-terang) .text-gray-400 { color: #9b868b !important; }
+    html:not(.paksa-terang) .text-stone-300 { color: #6b565b !important; }
+    html:not(.paksa-terang) .border-stone-200 { border-color: #3d242a !important; }
+    html:not(.paksa-terang) .border-stone-300,
+    html:not(.paksa-terang) .border-gray-300 { border-color: #4a2c34 !important; }
+    html:not(.paksa-terang) .divide-stone-100 > * { border-color: #2d1d23 !important; }
+    html:not(.paksa-terang) .text-maroon,
+    html:not(.paksa-terang) .text-\[\#6B1124\],
+    html:not(.paksa-terang) .hover\:text-maroon:hover { color: #ffb2b6 !important; }
+    html:not(.paksa-terang) .bg-maroon,
+    html:not(.paksa-terang) .bg-\[\#6B1124\],
+    html:not(.paksa-terang) button[style*="6B1124"] { background-color: #e63956 !important; }
+    html:not(.paksa-terang) .hover\:bg-maroon-dark:hover,
+    html:not(.paksa-terang) .hover\:bg-\[\#4A0012\]:hover { background-color: #9e1c36 !important; }
+    html:not(.paksa-terang) .bg-maroon-dark,
+    html:not(.paksa-terang) .bg-\[\#4A0012\] { background-color: #160e11 !important; }
+    html:not(.paksa-terang) .bg-maroon-soft,
+    html:not(.paksa-terang) .hover\:bg-maroon-soft:hover { background-color: #2a1319 !important; }
+    html:not(.paksa-terang) .border-maroon { border-color: #9e1c36 !important; }
+    html:not(.paksa-terang) .focus\:ring-maroon:focus,
+    html:not(.paksa-terang) .focus\:ring-\[\#6B1124\]:focus { --tw-ring-color: #e63956 !important; }
+    html:not(.paksa-terang) input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]):not([type="submit"]),
+    html:not(.paksa-terang) textarea,
+    html:not(.paksa-terang) select { background-color: #120d0e !important; color: #fdf0f2 !important; }
+    html:not(.paksa-terang) input[readonly] { background-color: #1a1215 !important; color: #bda9ae !important; }
+    html:not(.paksa-terang) input::placeholder,
+    html:not(.paksa-terang) textarea::placeholder { color: rgba(224, 208, 211, .4) !important; }
+    html:not(.paksa-terang) input[type="checkbox"],
+    html:not(.paksa-terang) input[type="radio"] { accent-color: #e63956; }
+    html:not(.paksa-terang) .file\:bg-maroon-soft::file-selector-button { background-color: #2a1319 !important; }
+    html:not(.paksa-terang) .file\:text-maroon::file-selector-button { color: #ffb2b6 !important; }
+    html:not(.paksa-terang) .hover\:file\:bg-\[\#f0dce0\]:hover::file-selector-button { background-color: #3a1c25 !important; }
+    html:not(.paksa-terang) .bg-emerald-50,
+    html:not(.paksa-terang) .bg-green-50,
+    html:not(.paksa-terang) .hover\:bg-emerald-50:hover { background-color: rgba(16, 185, 129, .12) !important; }
+    html:not(.paksa-terang) .bg-emerald-100 { background-color: rgba(16, 185, 129, .20) !important; }
+    html:not(.paksa-terang) .text-emerald-700,
+    html:not(.paksa-terang) .text-green-700 { color: #34d399 !important; }
+    html:not(.paksa-terang) .text-emerald-800 { color: #6ee7b7 !important; }
+    html:not(.paksa-terang) .border-emerald-200,
+    html:not(.paksa-terang) .border-green-200 { border-color: rgba(16, 185, 129, .35) !important; }
+    html:not(.paksa-terang) .bg-red-50,
+    html:not(.paksa-terang) .hover\:bg-red-50:hover { background-color: rgba(239, 68, 68, .12) !important; }
+    html:not(.paksa-terang) .bg-red-100 { background-color: rgba(239, 68, 68, .20) !important; }
+    html:not(.paksa-terang) .text-red-700 { color: #fca5a5 !important; }
+    html:not(.paksa-terang) .text-red-800 { color: #fecaca !important; }
+    html:not(.paksa-terang) .border-red-200 { border-color: rgba(239, 68, 68, .35) !important; }
+    html:not(.paksa-terang) .bg-sky-50 { background-color: rgba(14, 165, 233, .12) !important; }
+    html:not(.paksa-terang) .bg-sky-100 { background-color: rgba(14, 165, 233, .20) !important; }
+    html:not(.paksa-terang) .text-sky-700 { color: #38bdf8 !important; }
+    html:not(.paksa-terang) .text-sky-800 { color: #7dd3fc !important; }
+    html:not(.paksa-terang) .border-sky-200 { border-color: rgba(14, 165, 233, .35) !important; }
+    html:not(.paksa-terang) .bg-amber-50,
+    html:not(.paksa-terang) .hover\:bg-amber-50:hover { background-color: rgba(245, 158, 11, .12) !important; }
+    html:not(.paksa-terang) .bg-amber-100 { background-color: rgba(245, 158, 11, .20) !important; }
+    html:not(.paksa-terang) .text-amber-700 { color: #fbbf24 !important; }
+    html:not(.paksa-terang) .text-amber-800 { color: #fcd34d !important; }
+    html:not(.paksa-terang) .border-amber-200 { border-color: rgba(245, 158, 11, .35) !important; }
+    html:not(.paksa-terang) .logo-badge,
+    html:not(.paksa-terang) .qr-box { background-color: #fff !important; }
 }

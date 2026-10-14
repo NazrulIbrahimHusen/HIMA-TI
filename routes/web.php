@@ -38,7 +38,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('anggota/import',         [AnggotaController::class, 'import'])->name('anggota.import.store');
         Route::get('anggota/import/template', [AnggotaController::class, 'template'])->name('anggota.import.template');
         Route::post('anggota/{anggota}/reset-password', [AnggotaController::class, 'resetPassword'])->name('anggota.reset-password');
-        Route::resource('anggota', AnggotaController::class)->except(['show']);
+        Route::resource('anggota', AnggotaController::class)->except(['show'])->parameters(['anggota' => 'anggota']);
 
         // Kegiatan + sesi absensi + token/QR
         Route::get('kegiatan/{kegiatan}/qr',       [KegiatanController::class, 'qr'])->name('kegiatan.qr');

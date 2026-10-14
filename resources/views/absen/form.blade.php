@@ -8,16 +8,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Absensi — {{ $kegiatan->nama }}</title>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Noto+Serif:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
     @if ($siteKey && $state === 'aktif' && !$berhasil && !$sudah)
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     @endif
-    <style>body{font-family:'Plus Jakarta Sans',sans-serif}.serif{font-family:'Noto Serif',serif}.mono{font-family:'JetBrains Mono',monospace}</style>
+    @include('layouts._tema')
 </head>
 <body class="min-h-screen bg-[#FAF6F5] text-stone-800">
 
     <header class="bg-[#4A0012] px-4 py-5 text-center text-white">
+        <x-logo tinggi="h-12" class="mb-3" />
         <p class="text-xs uppercase tracking-widest text-white/60">Absensi Kegiatan</p>
         <h1 class="serif mt-1 text-xl font-bold leading-snug">{{ $kegiatan->nama }}</h1>
         @if ($kegiatan->lokasi)

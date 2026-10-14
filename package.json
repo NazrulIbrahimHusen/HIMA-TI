@@ -17,7 +17,12 @@
         "@laravel/multiplex": "^0.4.1"
     },
     "dependencies": {
+        "@fontsource-variable/plus-jakarta-sans": "^5.3.0",
+        "@fontsource/jetbrains-mono": "^5.3.0",
+        "@fontsource/noto-serif": "^5.3.0",
+        "alpinejs": "^3.17.4",
         "build": "^0.1.4",
+        "chart.js": "^4.5.1",
         "npm": "^12.2.0",
         "run": "^2.1.7"
     }

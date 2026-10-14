@@ -25,29 +25,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard') — SI HIMA Informatika</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Noto+Serif:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        maroon: { DEFAULT: '#6B1124', dark: '#4A0012', light: '#8E2A3F', soft: '#F7ECEE' },
-                    },
-                    fontFamily: {
-                        sans:  ['"Plus Jakarta Sans"', 'sans-serif'],
-                        serif: ['"Noto Serif"', 'serif'],
-                        mono:  ['"JetBrains Mono"', 'monospace'],
-                    },
-                },
-            },
-        };
-    </script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
-    <style>[x-cloak]{display:none !important}</style>
+    @include('layouts._tema')
     @stack('head')
 </head>
 <body class="bg-[#FAF6F5] font-sans text-stone-800" x-data="{ sidebar: false }">
@@ -60,7 +38,7 @@
     <aside class="fixed inset-y-0 left-0 z-40 flex w-64 flex-col bg-maroon-dark text-white transition-transform duration-200 lg:translate-x-0"
            :class="sidebar ? 'translate-x-0' : '-translate-x-full'">
         <div class="flex items-center gap-3 px-6 py-5 border-b border-white/10">
-            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-white/15 font-serif text-lg font-bold">HI</div>
+            <x-logo tinggi="h-9" />
             <div class="leading-tight">
                 <p class="font-serif text-base font-bold">SI HIMA</p>
                 <p class="text-xs text-white/60">Informatika UNILAM</p>

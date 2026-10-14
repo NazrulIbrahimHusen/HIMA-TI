@@ -113,12 +113,18 @@
 @endsection
 
 @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
     <script>
-        const maroon = '#6B1124';
+        document.addEventListener('chart-siap', () => {
+        const pemantau = window.matchMedia('(prefers-color-scheme: dark)');
+        const gelap = pemantau.matches;
+        const maroon = gelap ? '#e63956' : '#6B1124';
+        // Ganti tema perangkat saat halaman terbuka → muat ulang agar warna grafik menyesuaikan
+        pemantau.addEventListener('change', () => location.reload());
         const labels = @json($bulanLabels);
 
         Chart.defaults.font.family = '"Plus Jakarta Sans", sans-serif';
+        Chart.defaults.color = gelap ? '#bda9ae' : '#78716c';
+        Chart.defaults.borderColor = gelap ? '#3d242a' : '#e7e5e4';
 
         new Chart(document.getElementById('chartKegiatan'), {
             type: 'bar',
@@ -139,7 +145,7 @@
                 labels,
                 datasets: [{
                     label: 'Keaktifan (%)', data: @json($trenKeaktifan),
-                    borderColor: maroon, backgroundColor: 'rgba(107,17,36,0.12)',
+                    borderColor: maroon, backgroundColor: gelap ? 'rgba(230,57,86,0.15)' : 'rgba(107,17,36,0.12)',
                     fill: true, tension: 0.3, spanGaps: true, pointRadius: 4,
                 }],
             },
@@ -158,7 +164,7 @@
                 datasets: [{
                     data: @json(array_values($grade)),
                     backgroundColor: ['#2E7D32', '#7CB342', '#F9A825', '#EF6C00', '#C62828'],
-                    borderWidth: 2, borderColor: '#fff',
+                    borderWidth: 2, borderColor: gelap ? '#1a1215' : '#fff',
                 }],
             },
             options: {
@@ -167,5 +173,6 @@
             },
         });
         @endif
+        });
     </script>
 @endpush

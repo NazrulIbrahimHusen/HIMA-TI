@@ -4,17 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Mahasiswa — SI HIMA Informatika</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    @include('layouts._tema')
 </head>
 <body class="min-h-screen bg-gray-50 flex items-center justify-center">
     <div class="w-full max-w-md px-4">
 
         {{-- Logo & Judul --}}
         <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4"
-                 style="background-color: #6B1124;">
-                <span class="text-white text-2xl font-bold">HI</span>
-            </div>
+            <x-logo tinggi="h-16" class="mb-4" />
             <h1 class="text-2xl font-bold text-gray-800">SI HIMA Informatika</h1>
             <p class="text-gray-500 text-sm mt-1">Portal Mahasiswa</p>
         </div>

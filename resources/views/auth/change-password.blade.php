@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ganti Password — SI HIMA Informatika</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    @include('layouts._tema')
 </head>
 <body class="min-h-screen bg-gray-50 flex items-center justify-center">
     <div class="w-full max-w-md px-4">
