@@ -66,7 +66,7 @@
             <h3 class="mb-3 font-serif text-lg font-bold text-stone-800">Link & QR Absensi</h3>
 
             @if ($kegiatan->status === 'published')
-                <div class="mb-4 flex justify-center qr-box rounded-xl border border-stone-200 bg-white p-3 [&>svg]:h-auto [&>svg]:max-w-full">{!! $qrSvg !!}</div>
+                <div class="mb-4 flex justify-center rounded-xl border border-stone-200 bg-white p-3 [&>svg]:h-auto [&>svg]:max-w-full">{!! $qrSvg !!}</div>
 
                 <div x-data="{ ok: false }" class="mb-3">
                     <p class="mb-1 text-xs font-medium text-stone-500">Link absensi</p>
@@ -140,6 +140,36 @@
                 </table>
             </div>
         </div>
+    </div>
+
+    {{-- Sertifikat --}}
+    <div class="mb-6 rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
+        <h3 class="mb-1 font-serif text-lg font-bold text-stone-800">Sertifikat</h3>
+        <p class="mb-4 text-sm text-stone-500">
+            Tempel link sertifikat (mis. Google Drive). Link ini tidak pernah tampil ke peserta: mereka mengunduh lewat tombol setelah login dan terverifikasi hadir di seluruh sesi.
+        </p>
+
+        @if ($errors->has('sertifikat_url'))
+            <div class="mb-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">{{ $errors->first('sertifikat_url') }}</div>
+        @endif
+
+        <form method="POST" action="{{ route('admin.kegiatan.sertifikat', $kegiatan) }}" class="grid grid-cols-1 items-end gap-4 sm:grid-cols-4">
+            @csrf
+            @method('PUT')
+            <div class="sm:col-span-3">
+                <label for="sertifikat_url" class="mb-1 block text-xs font-medium text-stone-500">Link sertifikat</label>
+                <input id="sertifikat_url" type="url" name="sertifikat_url" maxlength="2000" placeholder="https://drive.google.com/..."
+                       value="{{ old('sertifikat_url', $kegiatan->sertifikat_url) }}"
+                       class="w-full rounded-lg border border-stone-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-maroon">
+            </div>
+            <div class="flex items-center gap-4">
+                <label class="flex items-center gap-2 text-sm text-stone-600">
+                    <input type="checkbox" name="sertifikat_aktif" value="1" @checked(old('sertifikat_aktif', $kegiatan->sertifikat_aktif)) class="h-4 w-4 rounded border-stone-300">
+                    Aktifkan
+                </label>
+                <button type="submit" class="rounded-lg bg-maroon px-4 py-2 text-sm font-semibold text-white hover:bg-maroon-dark">Simpan</button>
+            </div>
+        </form>
     </div>
 
     {{-- Absensi terbaru --}}

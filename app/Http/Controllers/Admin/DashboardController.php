@@ -6,12 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\Absensi;
 use App\Models\Anggota;
 use App\Models\Kegiatan;
-use App\Models\SesiAbsensi;
+use App\Services\MonitoringService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
+    public function __construct(private MonitoringService $monitoring)
+    {
+    }
+
     public function index(Request $request)
     {
         Carbon::setLocale('id');
@@ -26,7 +30,6 @@ class DashboardController extends Controller
         $end   = now()->endOfMonth();
         $range = [$start->toDateString(), $end->toDateString()];
 
-        // Label bulan untuk sumbu X grafik
         $bulanKeys   = [];
         $bulanLabels = [];
         for ($i = 0; $i < $bulan; $i++) {
@@ -35,61 +38,33 @@ class DashboardController extends Controller
             $bulanLabels[] = $m->translatedFormat('M Y');
         }
 
-        // ── Kegiatan dalam periode ──────────────────────────────────────────
+        // Kegiatan per bulan
         $kegiatan = Kegiatan::whereBetween('tanggal_mulai', $range)->get();
         $kegiatanPerBulan = collect($bulanKeys)->map(
             fn ($key) => $kegiatan->filter(fn ($k) => $k->tanggal_mulai->format('Y-m') === $key)->count()
         )->all();
 
-        // ── Absensi dalam periode ───────────────────────────────────────────
-        $absensi = Absensi::with('sesi.kegiatan')
+        // Total kehadiran (anggota + tamu) pada kegiatan dalam periode
+        $totalHadir = Absensi::where('status', 'hadir')
             ->whereHas('sesi.kegiatan', fn ($q) => $q->whereBetween('tanggal_mulai', $range))
-            ->get();
+            ->count();
 
-        $totalHadir = $absensi->where('status', 'hadir')->count();
+        // Keaktifan: aturan yang sama dengan halaman Monitoring
+        $units         = $this->monitoring->unit($start, $end);
+        $rataKeaktifan = $units->isEmpty() ? null : round($units->where('hadir', true)->count() / $units->count() * 100, 1);
 
-        // Jumlah sesi per kegiatan (untuk aturan: harus hadir di SEMUA sesi)
-        $sesiCount = SesiAbsensi::selectRaw('kegiatan_id, count(*) as total')
-            ->groupBy('kegiatan_id')
-            ->pluck('total', 'kegiatan_id');
-
-        // Satu "unit" = satu anggota pada satu kegiatan. Tamu tidak dihitung.
-        $units = collect();
-        $rowsAnggota = $absensi->where('tipe_peserta', 'anggota')->whereNotNull('anggota_id');
-
-        foreach ($rowsAnggota->groupBy('anggota_id') as $anggotaId => $perAnggota) {
-            foreach ($perAnggota->groupBy(fn ($a) => $a->sesi->kegiatan_id) as $kegiatanId => $items) {
-                $units->push([
-                    'anggota_id' => $anggotaId,
-                    'month'      => $items->first()->sesi->kegiatan->tanggal_mulai->format('Y-m'),
-                    'hadir'      => $items->where('status', 'hadir')->count() >= ($sesiCount[$kegiatanId] ?? 1),
-                ]);
-            }
-        }
-
-        // Rata-rata keaktifan keseluruhan
-        $rataKeaktifan = $units->isEmpty()
-            ? null
-            : round($units->where('hadir', true)->count() / $units->count() * 100, 1);
-
-        // Tren keaktifan per bulan (null jika belum ada data bulan itu)
         $trenKeaktifan = collect($bulanKeys)->map(function ($key) use ($units) {
-            $bulanIni = $units->where('month', $key);
+            $bulanIni = $units->where('bulan', $key);
+
             return $bulanIni->isEmpty()
                 ? null
                 : round($bulanIni->where('hadir', true)->count() / $bulanIni->count() * 100, 1);
         })->all();
 
-        // Distribusi grade A–E per anggota
-        $grade = ['A' => 0, 'B' => 0, 'C' => 0, 'D' => 0, 'E' => 0];
-        foreach ($units->groupBy('anggota_id') as $perAnggota) {
-            $persen = $perAnggota->where('hadir', true)->count() / $perAnggota->count() * 100;
-            $grade[$this->hitungGrade($persen)]++;
+        $grade = array_fill_keys(array_keys(MonitoringService::GRADE), 0);
+        foreach ($this->monitoring->perAnggota($units) as $s) {
+            $grade[$s['grade']]++;
         }
-
-        // ── Ringkasan & absensi terbaru ─────────────────────────────────────
-        $anggotaAktif  = Anggota::aktif()->count();
-        $absensiTerbaru = Absensi::with('sesi.kegiatan')->latest()->limit(8)->get();
 
         return view('admin.dashboard', [
             'bulan'            => $bulan,
@@ -97,22 +72,11 @@ class DashboardController extends Controller
             'kegiatanPerBulan' => $kegiatanPerBulan,
             'trenKeaktifan'    => $trenKeaktifan,
             'grade'            => $grade,
-            'anggotaAktif'     => $anggotaAktif,
+            'anggotaAktif'     => Anggota::aktif()->count(),
             'totalKegiatan'    => $kegiatan->count(),
             'totalHadir'       => $totalHadir,
             'rataKeaktifan'    => $rataKeaktifan,
-            'absensiTerbaru'   => $absensiTerbaru,
+            'absensiTerbaru'   => Absensi::with('sesi.kegiatan')->latest()->limit(8)->get(),
         ]);
-    }
-
-    private function hitungGrade(float $persen): string
-    {
-        return match (true) {
-            $persen >= 80 => 'A',
-            $persen >= 60 => 'B',
-            $persen >= 40 => 'C',
-            $persen >= 20 => 'D',
-            default       => 'E',
-        };
     }
 }

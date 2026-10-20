@@ -41,6 +41,11 @@
 .serif { font-family: var(--font-serif); }
 .mono  { font-family: var(--font-mono); }
 
+/* Elemen yang disembunyikan saat dicetak / disimpan sebagai PDF */
+@media print {
+    .tanpa-cetak { display: none !important; }
+}
+
 /*
  * Mode gelap otomatis mengikuti perangkat (prefers-color-scheme): palet "Academic Crimson Noir".
  * Kanvas #120d0e, kartu #1a1215, garis #3d242a, aksen #e63956, teks #fdf0f2.
@@ -129,4 +134,10 @@
     html:not(.paksa-terang) .border-amber-200 { border-color: rgba(245, 158, 11, .35) !important; }
     html:not(.paksa-terang) .logo-badge,
     html:not(.paksa-terang) .qr-box { background-color: #fff !important; }
+
+    /* Grade: B (lime) dan D (oranye) */
+    html:not(.paksa-terang) .bg-lime-100 { background-color: rgba(132, 204, 22, .20) !important; }
+    html:not(.paksa-terang) .text-lime-800 { color: #bef264 !important; }
+    html:not(.paksa-terang) .bg-orange-100 { background-color: rgba(249, 115, 22, .20) !important; }
+    html:not(.paksa-terang) .text-orange-800 { color: #fdba74 !important; }
 }
