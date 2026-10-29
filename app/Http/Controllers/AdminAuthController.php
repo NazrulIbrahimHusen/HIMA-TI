@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules\Password;
 
 class AdminAuthController extends Controller
 {
@@ -19,13 +20,20 @@ class AdminAuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email'    => 'required|email',
-            'password' => 'required',
-        ], [
-            'email.required'    => 'Email wajib diisi.',
-            'email.email'       => 'Format email tidak valid.',
-            'password.required' => 'Password wajib diisi.',
-        ]);
+    'name'     => ['required', 'string', 'max:255'],
+    'email'    => ['required', 'email', 'unique:users,email'],
+    'password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()],
+   ], [
+    'name.required'      => 'Nama lengkap wajib diisi.',
+    'email.required'     => 'Email wajib diisi.',
+    'email.email'        => 'Format email tidak valid.',
+    'email.unique'       => 'Email ini sudah terdaftar.',
+    'password.required'  => 'Password wajib diisi.',
+    'password.confirmed' => 'Konfirmasi password tidak cocok.',
+    'password.min'       => 'Password minimal 8 karakter.',
+    'password.mixed'     => 'Password harus mengandung huruf besar dan huruf kecil.',
+    'password.numbers'   => 'Password harus mengandung setidaknya satu angka.',
+  ]);
 
         $credentials = $request->only('email', 'password');
         $remember    = $request->boolean('remember');
