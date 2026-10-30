@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\AnggotaController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DivisiController;
 use App\Http\Controllers\Admin\KelolaAdminController;
+use App\Http\Controllers\Admin\KelolaKaprodiController;
 use App\Http\Controllers\Admin\KegiatanController;
 use App\Http\Controllers\Admin\MonitoringController;
 use App\Http\Controllers\Admin\PengumumanController;
@@ -95,6 +96,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // ── Super Admin only ──────────────────────────────────────────────────
         Route::middleware('superadmin')->prefix('super')->name('super.')->group(function () {
+            // Kelola Admin
             Route::get('/akun',                                 [KelolaAdminController::class, 'index'])->name('akun');
             Route::get('/akun/tambah',                          [KelolaAdminController::class, 'create'])->name('akun.create');
             Route::post('/akun',                                [KelolaAdminController::class, 'store'])->name('akun.store');
@@ -103,6 +105,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::patch('/akun/{kelola_admin}/reset-password', [KelolaAdminController::class, 'resetPassword'])->name('akun.reset-password');
             Route::delete('/akun/{kelola_admin}',               [KelolaAdminController::class, 'destroy'])->name('akun.destroy');
             Route::patch('/akun/{id}/restore',                  [KelolaAdminController::class, 'restore'])->name('akun.restore');
+
+            // Kelola Kaprodi
+            Route::get('/kaprodi',                                      [KelolaKaprodiController::class, 'index'])->name('kaprodi');
+            Route::get('/kaprodi/tambah',                               [KelolaKaprodiController::class, 'create'])->name('kaprodi.create');
+            Route::post('/kaprodi',                                     [KelolaKaprodiController::class, 'store'])->name('kaprodi.store');
+            Route::get('/kaprodi/{kelola_kaprodi}/edit',                [KelolaKaprodiController::class, 'edit'])->name('kaprodi.edit');
+            Route::put('/kaprodi/{kelola_kaprodi}',                     [KelolaKaprodiController::class, 'update'])->name('kaprodi.update');
+            Route::patch('/kaprodi/{kelola_kaprodi}/reset-password',    [KelolaKaprodiController::class, 'resetPassword'])->name('kaprodi.reset-password');
+            Route::delete('/kaprodi/{kelola_kaprodi}',                  [KelolaKaprodiController::class, 'destroy'])->name('kaprodi.destroy');
+            Route::patch('/kaprodi/{id}/restore',                       [KelolaKaprodiController::class, 'restore'])->name('kaprodi.restore');
         });
     });
 });

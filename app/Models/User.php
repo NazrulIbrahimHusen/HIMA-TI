@@ -47,10 +47,16 @@ class User extends Authenticatable
         return $this->role === 'super_admin';
     }
 
-    // Cek apakah user adalah admin
+    // Cek apakah user adalah admin (termasuk super_admin dan kaprodi)
     public function isAdmin(): bool
     {
-        return in_array($this->role, ['super_admin', 'admin']);
+        return in_array($this->role, ['super_admin', 'admin', 'kaprodi']);
+    }
+
+    // Cek apakah user adalah kaprodi (read-only)
+    public function isKaprodi(): bool
+    {
+        return $this->role === 'kaprodi';
     }
 
     // Cek apakah user adalah mahasiswa
