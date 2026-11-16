@@ -25,13 +25,13 @@
         body.m-body { padding-bottom: 72px; }
 
         .m-sidebar {
-            position: fixed; top: 0; bottom: 0; left: 0; z-index: 40;
-            width: 16rem; display: flex; flex-direction: column;
-            transform: translateX(-100%); transition: transform .2s ease;
+        position: fixed; top: 0; bottom: 0; left: 0; z-index: 50;
+        width: 16rem; display: flex; flex-direction: column;
+        transform: translateX(-100%); transition: transform .2s ease;
         }
         .m-sidebar.open { transform: translateX(0); }
 
-        .m-overlay { position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 30; background: rgba(0,0,0,.45); }
+        .m-overlay { position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 45; background: rgba(0,0,0,.45); }
 
         .m-bottomnav {
             position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;

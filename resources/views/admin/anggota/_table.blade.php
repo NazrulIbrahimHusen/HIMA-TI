@@ -23,7 +23,14 @@
                                     {{ strtoupper(mb_substr($a->nama, 0, 1)) }}
                                 </div>
                             @endif
-                            <span class="font-medium">{{ $a->nama }}</span>
+                            <div class="min-w-0">
+                                <span class="font-medium">{{ $a->nama }}</span>
+                                @if ($a->pengurusAktif)
+                                    <span class="mt-0.5 block w-fit rounded-full bg-maroon-soft px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-maroon">
+                                        {{ $a->jabatan_label }}
+                                    </span>
+                                @endif
+                            </div>
                         </div>
                     </td>
                     <td class="px-5 py-3 font-mono text-xs">{{ $a->nim }}</td>
@@ -38,6 +45,12 @@
                     </td>
                     <td class="px-5 py-3">
                         <div class="flex items-center justify-end gap-3 text-xs font-semibold">
+                            @if ($a->pengurusAktif)
+                                <a href="{{ route('admin.pengurus.edit', $a->pengurusAktif) }}" class="text-emerald-700 hover:underline">Edit jabatan</a>
+                            @elseif ($a->status === 'aktif')
+                                <a href="{{ route('admin.pengurus.create', ['nim' => $a->nim]) }}" class="text-emerald-700 hover:underline">Jadikan pengurus</a>
+                            @endif
+
                             <a href="{{ route('admin.anggota.edit', $a) }}" class="text-maroon hover:underline">Edit</a>
 
                             <form method="POST" action="{{ route('admin.anggota.reset-password', $a) }}"

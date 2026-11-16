@@ -21,6 +21,7 @@ class AnggotaController extends Controller
     public function index(Request $request)
     {
         $anggota = Anggota::query()
+            ->with('pengurusAktif.divisi')
             ->when($request->filled('q'), fn ($q) => $q->search($request->q))
             ->when($request->filled('prodi'), fn ($q) => $q->where('prodi', $request->prodi))
             ->when($request->filled('angkatan'), fn ($q) => $q->where('angkatan', $request->angkatan))

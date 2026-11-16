@@ -56,7 +56,7 @@
                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm
                                   focus:outline-none focus:ring-2 focus:border-transparent"
                            placeholder="••••••••">
-                    <p class="text-gray-400 text-xs mt-1">Password default = NIM kamu</p>
+                    <p class="text-gray-400 text-xs mt-1">Pastikan Password Sudah Benar</p>
                 </div>
 
                 {{-- Remember Me --}}

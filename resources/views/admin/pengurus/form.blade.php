@@ -3,6 +3,12 @@
 @section('title', $pengurus ? 'Edit Pengurus' : 'Tambah Pengurus')
 
 @section('content')
+    @php
+        // NIM yang tampil di input (old input > NIM dari tombol "Jadikan pengurus")
+        $nimIsi  = old('nim', $nimAwal ?? '');
+        $namaIsi = $pengurus ? null : ($calonList->firstWhere('nim', $nimIsi)?->nama ?? null);
+    @endphp
+
     <div class="mx-auto max-w-xl">
         <a href="{{ route('admin.pengurus.index', ['periode' => $periode->id]) }}" class="mb-4 inline-block text-sm text-stone-500 hover:text-maroon">&larr; Kembali ke struktur pengurus</a>
 
@@ -25,13 +31,16 @@
                                class="w-full rounded-lg border border-stone-300 bg-stone-100 px-3 py-2.5 text-sm text-stone-500">
                     @else
                         <input id="nim" type="text" name="nim" list="daftar-calon" required maxlength="10" inputmode="numeric" autocomplete="off"
-                               value="{{ old('nim') }}" placeholder="Ketik NIM atau nama untuk memilih"
+                               value="{{ $nimIsi }}" placeholder="Ketik NIM atau nama untuk memilih"
                                class="w-full rounded-lg border border-stone-300 px-3 py-2.5 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-maroon">
                         <datalist id="daftar-calon">
                             @foreach ($calonList as $c)
                                 <option value="{{ $c->nim }}" label="{{ $c->nama }}">{{ $c->nama }}</option>
                             @endforeach
                         </datalist>
+                        @if ($namaIsi)
+                            <p class="mt-1 text-sm font-semibold text-maroon">{{ $namaIsi }}</p>
+                        @endif
                         <p class="mt-1 text-xs text-stone-400">Hanya anggota aktif yang belum menjadi pengurus pada periode ini.</p>
                     @endif
                 </div>

@@ -40,6 +40,15 @@ class Anggota extends Model
         return $this->hasMany(Pengurus::class);
     }
 
+    /**
+     * Jabatan pengurus pada periode yang sedang aktif (null = hanya anggota biasa).
+     */
+    public function pengurusAktif()
+    {
+        return $this->hasOne(Pengurus::class)
+            ->whereHas('periode', fn ($q) => $q->where('status', 'aktif'));
+    }
+
     public function absensi()
     {
         return $this->hasMany(Absensi::class);
@@ -73,5 +82,20 @@ class Anggota extends Model
     public function getStatusLabelAttribute(): string
     {
         return $this->status === 'aktif' ? 'Aktif' : 'Tidak Aktif';
+    }
+
+    /**
+     * Label jabatan untuk KTA/profil, mengikuti periode aktif.
+     * Contoh: "Anggota", "Ketua Umum", "Koordinator Humas".
+     */
+    public function getJabatanLabelAttribute(): string
+    {
+        $p = $this->pengurusAktif;
+
+        if (!$p) {
+            return 'Anggota';
+        }
+
+        return $p->divisi ? "{$p->jabatan} {$p->divisi->nama}" : $p->jabatan;
     }
 }

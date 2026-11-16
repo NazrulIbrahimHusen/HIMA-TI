@@ -39,7 +39,16 @@ class MahasiswaAuthController extends Controller
 
             if (!$user->isMahasiswa()) {
                 Auth::logout();
-                return back()->withErrors(['nim' => 'Akun ini bukan akun mahasiswa.']);
+                return back()->withErrors(['akun' => 'Akun ini bukan akun mahasiswa.']);
+            }
+
+            // Hanya anggota berstatus aktif yang boleh masuk portal.
+            // Anggota yang dihapus (soft delete) otomatis ikut ditolak karena relasinya null.
+            if ($user->anggota?->status !== 'aktif') {
+                Auth::logout();
+                return back()
+                    ->withErrors(['akun' => 'Akun Anda sudah tidak aktif. Hubungi pengurus HIMA untuk informasi lebih lanjut.'])
+                    ->withInput($request->only('nim'));
             }
 
             $request->session()->regenerate();
@@ -51,7 +60,7 @@ class MahasiswaAuthController extends Controller
             return redirect()->intended(route('mahasiswa.dashboard'));
         }
 
-        return back()->withErrors(['nim' => 'NIM atau password salah.'])->withInput($request->only('nim'));
+        return back()->withErrors(['akun' => 'NIM atau password salah.'])->withInput($request->only('nim'));
     }
 
     public function logout(Request $request)

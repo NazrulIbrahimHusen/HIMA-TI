@@ -49,7 +49,7 @@
                                   focus:outline-none focus:ring-2 focus:border-transparent
                                   @error('email') border-red-400 @enderror"
                            style="--tw-ring-color: #6B1124;"
-                           placeholder="admin@hima-ti.com">
+                           placeholder="">
                     @error('email')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror

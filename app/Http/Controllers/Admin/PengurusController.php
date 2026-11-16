@@ -41,16 +41,28 @@ class PengurusController extends Controller
     public function create(Request $request)
     {
         $periode = PeriodeKepengurusan::find((int) $request->query('periode'))
-            ?? PeriodeKepengurusan::where('status', 'aktif')->firstOrFail();
+            ?? PeriodeKepengurusan::where('status', 'aktif')->first();
+
+        if (!$periode) {
+            return redirect()->route('admin.periode.index')
+                ->with('error', 'Belum ada periode aktif. Buat atau aktifkan periode terlebih dahulu.');
+        }
 
         $sudahPengurus = Pengurus::where('periode_id', $periode->id)->pluck('anggota_id');
 
+        $calonList = Anggota::aktif()->whereNotIn('id', $sudahPengurus)->orderBy('nama')->get(['nim', 'nama']);
+
+        // NIM terisi otomatis (dari tombol "Jadikan pengurus"), hanya jika memang masih bisa dipilih
+        $nim     = (string) $request->query('nim');
+        $nimAwal = $nim !== '' && $calonList->contains('nim', $nim) ? $nim : null;
+
         return view('admin.pengurus.form', [
-            'periode'     => $periode,
-            'pengurus'    => null,
-            'divisiList'  => Divisi::where('periode_id', $periode->id)->orderBy('urutan')->orderBy('id')->get(),
-            'calonList'   => Anggota::aktif()->whereNotIn('id', $sudahPengurus)->orderBy('nama')->get(['nim', 'nama']),
-            'divisiAwal'  => $request->query('divisi'),
+            'periode'    => $periode,
+            'pengurus'   => null,
+            'divisiList' => Divisi::where('periode_id', $periode->id)->orderBy('urutan')->orderBy('id')->get(),
+            'calonList'  => $calonList,
+            'divisiAwal' => $request->query('divisi'),
+            'nimAwal'    => $nimAwal,
         ]);
     }
 
@@ -101,6 +113,7 @@ class PengurusController extends Controller
             'divisiList' => Divisi::where('periode_id', $pengurus->periode_id)->orderBy('urutan')->orderBy('id')->get(),
             'calonList'  => collect(),
             'divisiAwal' => null,
+            'nimAwal'    => null,
         ]);
     }
 

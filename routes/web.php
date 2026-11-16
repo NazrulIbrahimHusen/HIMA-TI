@@ -42,12 +42,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::middleware('guest')->group(function () {
         Route::get('/login',  [AdminAuthController::class, 'showLoginForm'])->name('login');
-        Route::post('/login', [AdminAuthController::class, 'login'])->name('login.post');
+        Route::post('/login', [AdminAuthController::class, 'login'])
+            ->middleware('throttle:5,1')
+            ->name('login.post');
     });
-
-    Route::post('/admin/login', [AdminAuthController::class, 'login'])
-    ->middleware('throttle:5,1')
-    ->name('admin.login.submit');
 
     Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 
@@ -127,6 +125,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::middleware('guest')->group(function () {
     Route::get('/login',  [MahasiswaAuthController::class, 'showLoginForm'])->name('mahasiswa.login');
     Route::post('/login', [MahasiswaAuthController::class, 'login'])->name('mahasiswa.login.post');
+    ->middleware('throttle:5,1')
+    ->name('mahasiswa.login.post');
 });
 
 Route::post('/logout', [MahasiswaAuthController::class, 'logout'])->name('mahasiswa.logout');

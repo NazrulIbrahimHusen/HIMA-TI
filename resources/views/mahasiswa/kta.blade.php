@@ -18,11 +18,15 @@
         }
     }
 
+    // Jabatan mengikuti periode kepengurusan yang aktif ("Anggota" jika bukan pengurus)
+    $jabatan = $anggota?->jabatan_label ?? 'Anggota';
+
     $dataKta = [
         'nama'     => $user->name,
         'nim'      => (string) $user->nim,
         'prodi'    => $anggota->prodi ?? '',
         'angkatan' => $anggota ? 'Angkatan ' . $anggota->angkatan : '',
+        'jabatan'  => $jabatan,
         'aktif'    => ($anggota->status ?? '') === 'aktif',
         'logo'     => $logoB64,
         'foto'     => $fotoB64,
@@ -54,7 +58,7 @@
                     <p style="color:#fff;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;margin:0;">HIMA Informatika</p>
                     <p style="color:rgba(255,255,255,0.6);font-size:10px;margin:2px 0 0;font-family:Arial,sans-serif;">Universitas La Tansa Mashiro</p>
                 </div>
-                <div style="margin-left:auto;background:rgba(255,255,255,0.15);color:#fff;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:3px 10px;border-radius:999px;font-family:Arial,sans-serif;">Anggota</div>
+                <div style="margin-left:auto;max-width:45%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:rgba(255,255,255,0.15);color:#fff;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:3px 10px;border-radius:999px;font-family:Arial,sans-serif;">{{ $jabatan }}</div>
             </div>
 
             <div style="display:flex;align-items:center;gap:16px;margin-top:14px;">
@@ -138,15 +142,21 @@
         ctx.closePath();
     }
 
+    // font contoh: '700 30px Georgia, serif' -> gaya='700 ', ukuran=30, fam='Georgia, serif'
     function teks(ctx, str, x, y, font, warna, maxLebar, spasi) {
-        let ukuran = parseInt(font, 10);
-        const sisa = font.replace(/^\d+px/, '');
+        const m    = font.match(/^(.*?)(\d+)px\s+(.*)$/);
+        const gaya = m[1];
+        const fam  = m[3];
+        let ukuran = parseInt(m[2], 10);
+
         ctx.letterSpacing = spasi || '0px';
-        ctx.font = ukuran + 'px' + sisa;
+        ctx.font = gaya + ukuran + 'px ' + fam;
+
         while (maxLebar && ctx.measureText(str).width > maxLebar && ukuran > 14) {
             ukuran -= 2;
-            ctx.font = ukuran + 'px' + sisa;
+            ctx.font = gaya + ukuran + 'px ' + fam;
         }
+
         ctx.fillStyle = warna;
         ctx.fillText(str, x, y);
     }
@@ -180,11 +190,11 @@
         teks(ctx, 'HIMA INFORMATIKA', 175, 90, '700 30px Georgia, serif', '#ffffff', 460, '2px');
         teks(ctx, 'Universitas La Tansa Mashiro', 175, 128, '400 23px Arial, sans-serif', 'rgba(255,255,255,0.65)', 460);
 
-        // Badge ANGGOTA
+        // Badge jabatan (otomatis mengecil jika teks panjang)
         rr(ctx, W - 250, 62, 200, 52, 26);
         ctx.fillStyle = 'rgba(255,255,255,0.15)'; ctx.fill();
         ctx.textAlign = 'center';
-        teks(ctx, 'ANGGOTA', W - 150, 97, '600 23px Arial, sans-serif', '#ffffff', 0, '2px');
+        teks(ctx, D.jabatan.toUpperCase(), W - 150, 97, '600 23px Arial, sans-serif', '#ffffff', 170, '2px');
         ctx.textAlign = 'left';
 
         // Garis
